@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Remix: أكاديمية سومر | Sumer Academy",
+  "description": "نظام التعلم الذكي المستدام والدمج المجتمعي الرقمي في العراق - Sumer Academy: Smart Sustainable Learning and Digital Social Integration in Iraq.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
