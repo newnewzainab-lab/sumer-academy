@@ -153,6 +153,7 @@ export default function App() {
             onLoginSuccess={(profile) => {
               handleLoginSuccess(profile);
               setActiveTab(activeTab);
+            onRegister={handleRegister}  
             }}
             onClose={() => setActiveTab("home")}
           />
