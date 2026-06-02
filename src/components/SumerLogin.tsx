@@ -10,8 +10,7 @@ interface SumerLoginProps {
     completedCourses?: string[];
   }) => void;
   onClose?: () => void;
-}
-
+  onRegister: (fullName: string, phone: string) => Promise<void>;
 export const SumerLogin: React.FC<SumerLoginProps> = ({ onLoginSuccess, onClose }) => {
   const [activeChannel, setActiveChannel] = useState<"new" | "jaafar">("jaafar");
   const [newName, setNewName] = useState("");
@@ -53,7 +52,8 @@ export const SumerLogin: React.FC<SumerLoginProps> = ({ onLoginSuccess, onClose 
     setOtpSent(true);
     setSmsNotification(`📱 رسالة قصيرة واردة: مرحباً بك ${newName}! رمز التحقق الثنائي OTP لتأمين حسابك الجديد هو [ ${generatedCode} ]. انسخه لتأكيد هويتك.`);
   };
-
+  // إرسال البيانات الحية إلى قاعدة البيانات
+  onRegister(newName, newEmail);
   const handleCopyOtp = () => {
     navigator.clipboard.writeText(otpCode);
     setCopied(true);
