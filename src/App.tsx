@@ -1,3 +1,4 @@
+import { supabase } from '@/lib/supabase'
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Sumer3DLogo } from "./components/Sumer3DLogo";
@@ -46,7 +47,23 @@ import { SAMPLE_COURSES } from "./constants";
 export default function App() {
   const [activeTab, setActiveTab] = useState("home");
   const [microOnboarding, setMicroOnboarding] = useState(true);
-  
+  const handleRegister = async (fullName: string, phone: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .insert([
+        { 
+          full_name: fullName, 
+          phone: phone,         
+          role: 'student'       
+        }
+      ])
+
+    if (error) {
+      alert('حدث خطأ أثناء التسجيل: ' + error.message)
+    } else {
+      alert('تم تسجيل حسابك بنجاح في أكاديمية سومر!')
+    }
+  }
   const [showTour, setShowTour] = useState(() => {
     const rejected = sessionStorage.getItem("sumer_tour_rejected");
     const completed = sessionStorage.getItem("sumer_tour_completed");
