@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { loginStudent, registerStudent } from "../services/authService";
 
 export default function SumerLogin() {
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
@@ -23,33 +24,20 @@ export default function SumerLogin() {
     setLoading(true);
     setMessage(null);
 
-    const endpoint = activeTab === "login" ? "/api/auth/login" : "/api/auth/register";
-    const payload = activeTab === "login" 
-      ? { email: formData.email, password: formData.password }
-      : formData;
-
     try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "حدث خطأ ما");
-
-      setMessage({ 
-        type: "success", 
-        text: activeTab === "login" ? "تم تسجيل الدخول بنجاح! جاري الانتقال..." : "تم إنشاء الحساب بنجاح! يمكنك الدخول الآن." 
-      });
-      
       if (activeTab === "login") {
+        // تشغيل دالة تسجيل الدخول الحقيقية من السيرفس
+        await loginStudent(formData.email, formData.password);
+        setMessage({ type: "success", text: "تم تسجيل الدخول بنجاح! جاري الانتقال..." });
         setTimeout(() => window.location.href = "/dashboard", 2000);
       } else {
+        // تشغيل دالة إنشاء الحساب الحقيقية من السيرفس
+        await registerStudent(formData.fullName, formData.phone, formData.email, formData.password);
+        setMessage({ type: "success", text: "تم إنشاء حسابكِ بنجاح! يمكنكِ الآن تسجيل الدخول." });
         setActiveTab("login");
       }
     } catch (err: any) {
-      setMessage({ type: "error", text: err.message });
+      setMessage({ type: "error", text: err.message || "حدث خطأ أثناء الاتصال بالخادم" });
     } finally {
       setLoading(false);
     }
@@ -155,7 +143,7 @@ export default function SumerLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-600 text-[#0d1a3e] font-bold py-3 rounded-xl transition-colors mt-6 text-sm flex items-center justify-center shadow-md shadow-orange-500/10"
+            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-gray-600 text-[#0d1a3e] font-bold py-3 rounded-xl transition-colors mt-6 text-sm flex items-center justify-center shadow-md"
           >
             {loading ? "جاري التحميل..." : activeTab === "login" ? "تسجيل الدخول" : "تأكيد الحساب والاشتراك مجاناً"}
           </button>
